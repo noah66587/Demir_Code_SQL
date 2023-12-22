@@ -1,0 +1,175 @@
+<!-- admin-dispension-details.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dispension Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f3f4;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2,
+        h3 {
+            color: #3498db;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        #dispensionDetails {
+            margin-top: 20px;
+        }
+
+        #acceptCheckbox {
+            margin-right: 10px;
+        }
+
+        #saveButton {
+            background-color: #95a5a6;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #saveButton:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #95a5a6;
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Dispension Details</h2>
+    <div id="dispensionDetails"></div>
+    <br>
+    <h3>Accept Dispension:</h3>
+    <input type="checkbox" id="acceptCheckbox">
+    <button id="saveButton" onclick="saveDispension()">Save</button>
+
+    <script>
+        /* DISPENSION_DATA_PLACEHOLDER */
+    </script>
+    
+    <script>
+        // Ensure data is defined before using it
+        if (typeof dispensionData !== 'undefined') {
+            const dispensionDetails = document.getElementById('dispensionDetails');
+
+            // Create a table for dispension details
+            const dispensionTable = document.createElement('table');
+            
+            // Add dispension details as rows in the table
+            addTableRow('Dispension ID', dispensionData.dispensionID);
+            addTableRow('Start Date', formatDate(dispensionData.start_date));
+            addTableRow('End Date', formatDate(dispensionData.end_date));
+            addTableRow('File Name', dispensionData.file_name);
+
+            // Add other dispension details similarly
+
+            dispensionDetails.appendChild(dispensionTable);
+
+            // Update saveDispension function to get the checked status of the checkbox
+            function saveDispension() {
+                const accepted = document.getElementById('acceptCheckbox').checked;
+
+                fetch(`/admin/dispension/${dispensionData.dispensionID}/accept`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            accepted
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Dispension Accepted:', accepted);
+                        } else {
+                            console.error('Failed to update dispension:', data.message);
+                        }
+
+                        saveButton.disabled = true;
+                    })
+                    .catch(error => {
+                        console.error('Error during fetch:', error);
+                    });
+            }
+
+            function addTableRow(label, value) {
+                const row = dispensionTable.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                cell1.textContent = label;
+                cell2.textContent = value;
+            }
+
+            function formatDate(dateString) {
+                const options = {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                };
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-GB', options);
+            }
+        } else {
+            console.error('Dispension data is not defined');
+        }
+        function saveDispension() {
+    const accepted = document.getElementById('acceptCheckbox').checked;
+
+    fetch(`/admin/dispension/${dispensionData.dispensionID}/accept`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                accepted
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Dispension Accepted:', accepted);
+            } else {
+                console.error('Failed to update dispension:', data.message);
+            }
+
+            saveButton.disabled = true;
+        })
+        .catch(error => {
+            console.error('Error during fetch:', error);
+        });
+}
+    </script>
+</body>
+
+</html>

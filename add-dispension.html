@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Dispension</title>
+    <!-- Your existing styles -->
+    <style>
+body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f3f4;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 20px;
+        }
+
+        form {
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #3498db;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical; /* Allow vertical resizing of the textarea */
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>New Dispension</h2>
+
+    <form id="dispensionForm" action="/submit" method="post" enctype="multipart/form-data">
+        <!-- Add your form fields here -->
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required>
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" required>
+
+        <label for="reason">Reason:</label>
+        <select id="reason" name="reason">
+            <!-- Populate options dynamically based on your database -->
+            <option value="0">Select</option>
+            <option value="1">Medical</option>
+            <option value="2">Family Emergency</option>
+            <option value="3">Personal</option>
+            <option value="4">Other</option>
+            <option value="5">Unknown</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="job">Job:</label>
+        <select id="job" name="job">
+            <!-- Populate options dynamically based on your database -->
+            <option value="0">Select</option>
+            <option value="1">Mediamatiker/Mediamatikerin</option>
+            <option value="2">Informatiker/Informatikerin</option>
+            <option value="3">Kauffrau/Kaufmann</option>
+            <option value="4">Fachmann/Fachfrau Betreuung</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="lesson">Lessons:</label>
+        <select id="lesson" name="lesson">
+            <!-- Populate options dynamically based on your database -->
+            <option value="0">Select</option>
+            <option value="1">M102</option>
+            <option value="2">M202</option>
+            <option value="3">M303</option>
+            <option value="4">M404</option>
+            <option value="5">M505</option>
+            <option value="6">M606</option>
+            <option value="7">M707</option>
+            <option value="8">M808</option>
+            <option value="9">M909</option>
+            <option value="10">M010</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="teachers">Teachers:</label>
+        <textarea id="teachers" name="teachers" rows="4" placeholder="Enter your teachers..."></textarea>
+
+        <label for="workCheck">Work Check:</label>
+        <input type="checkbox" id="workCheck" name="workCheck" value="1">
+
+        <label for="parentCheck">Parent Check:</label>
+        <input type="checkbox" id="parentCheck" name="parentCheck" value="1">
+
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" rows="4" placeholder="Enter your comment..."></textarea>
+
+        <label for="fileInput">File:</label>
+        <input type="file" id="fileInput" name="fileInput">
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('dispensionForm');
+            const formData = new FormData(form);
+
+            // Fetch API to send form data to the server
+            fetch('/submit', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Form submitted successfully!');
+                    // Redirect to the home page or wherever needed
+                    window.location.href = '/home';
+                } else {
+                    alert('Form submission failed. Please check your inputs.');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting the form.');
+            });
+        }
+    </script>
+</body>
+</html>

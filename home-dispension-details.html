@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Dispension Details</title>
+    <!-- Add your styles here if needed -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f3f4;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2,
+        h3 {
+            color: #3498db;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        #dispensionDetails {
+            margin-top: 20px;
+        }
+
+        #deleteButton,
+        #editButton {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-right: 10px;
+            display: none; /* Hide the buttons by default */
+        }
+
+        #editButton {
+            background-color: #3498db;
+        }
+
+        #noActionsText {
+            margin-top: 20px;
+            color: #e74c3c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #95a5a6;
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Dispension Details</h2>
+    <div id="dispensionDetails"></div>
+    <br>
+    <h3>Actions:</h3>
+    <button id="deleteButton" onclick="deleteDispension()">Delete</button>
+    <button id="editButton" onclick="editDispension()">Edit</button>
+    <p id="noActionsText"></p>
+    <script>
+        /* DISPENSION_DATA_PLACEHOLDER */
+    </script>
+    <script>
+        // Ensure data is defined before using it
+        if (typeof dispensionData !== 'undefined') {
+            const dispensionDetails = document.getElementById('dispensionDetails');
+            const deleteButton = document.getElementById('deleteButton');
+            const editButton = document.getElementById('editButton');
+            const noActionsText = document.getElementById('noActionsText');
+
+            // Create a table for dispension details
+            const dispensionTable = document.createElement('table');
+
+            // Add dispension details as rows in the table
+            addTableRow('Dispension ID', dispensionData.dispensionID);
+            addTableRow('Start Date', formatDate(dispensionData.start_date));
+            addTableRow('End Date', formatDate(dispensionData.end_date));
+            addTableRow('File Name', dispensionData.file_name);
+
+            // Add other dispension details similarly
+
+            dispensionDetails.appendChild(dispensionTable);
+
+            function addTableRow(label, value) {
+                const row = dispensionTable.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                cell1.textContent = label;
+                cell2.textContent = value;
+            }
+
+            function formatDate(dateString) {
+                const options = {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                };
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-GB', options);
+            }
+
+            // Function to delete the dispension
+            function deleteDispension() {
+                // Confirm deletion
+                const confirmed = confirm('Are you sure you want to delete this dispension?');
+                if (confirmed) {
+                    // Make a DELETE request to the server
+                    fetch(`/dispensions/${dispensionData.dispensionID}`, {
+                        method: 'DELETE',
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Dispension Deleted:', dispensionData.dispensionID);
+                            // Optionally redirect to a different page or update the UI
+                        } else {
+                            console.error('Failed to delete dispension:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error during fetch:', error);
+                    });
+                }
+            }
+
+            // Function to edit the dispension
+            function editDispension() {
+                // Redirect to the edit page if the dispension is unaccepted
+                if (!dispensionData.accepted) {
+                    window.location.href = `/edit-dispension/${dispensionData.dispensionID}`;
+                } else {
+                    alert('You can only edit unaccepted dispensions.');
+                }
+            }
+
+            // Show/hide buttons based on dispension status
+            if (dispensionData.accepted && new Date(dispensionData.end_date) < new Date()) {
+                // Accepted and in the past, hide both buttons
+                deleteButton.style.display = 'none';
+                editButton.style.display = 'none';
+                noActionsText.textContent = 'No actions available.';
+            } else if (dispensionData.accepted) {
+                // Accepted but in the future, show only delete button
+                deleteButton.style.display = 'inline-block';
+                editButton.style.display = 'none';
+            } else {
+                // Unaccepted, show both buttons
+                deleteButton.style.display = 'inline-block';
+                editButton.style.display = 'inline-block';
+            }
+        } else {
+            console.error('Dispension data is not defined');
+        }
+    </script>
+</body>
+
+</html>

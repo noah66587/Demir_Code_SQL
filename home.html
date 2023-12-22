@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f3f4;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2,
+        h3 {
+            color: #3498db;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .dispensions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .dispension {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ecf0f1;
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .dispension:hover {
+            transform: translateY(-5px);
+        }
+
+        .pastDispension {
+            opacity: 0.7;
+            background-color: #bdc3c7;
+        }
+
+        .dispension span {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #username {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        h4 {
+            margin-top: 20px;
+            color: #3498db;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Welcome to your Home, <span id="username"></span>!</h2>
+    <button onclick="window.location.href = '/submit'">Create new dispension</button>
+    <button onclick="toggleSort()">Toggle Sort</button>
+
+    <h3>Your Dispensions:</h3>
+
+    <h4>Unaccepted Dispensions:</h4>
+    <div id="unacceptedDispensions" class="dispensions-grid"></div>
+
+    <h4>Future Dispensions:</h4>
+    <div id="futureDispensions" class="dispensions-grid"></div>
+
+    <h4>Past Dispensions:</h4>
+    <div id="pastDispensions" class="dispensions-grid"></div>
+
+    <!-- DATA_PLACEHOLDER -->
+
+    <script>
+        let sortAscending = true;
+        let unacceptedDispensionsList;
+        let futureDispensionsList;
+        let pastDispensionsList;
+
+        // Ensure data is defined before using it
+        if (typeof data !== 'undefined') {
+            const usernameElement = document.getElementById('username');
+            futureDispensionsList = document.getElementById('futureDispensions');
+            unacceptedDispensionsList = document.getElementById('unacceptedDispensions');
+            pastDispensionsList = document.getElementById('pastDispensions');
+
+            if (data.user) {
+                usernameElement.textContent = data.user.username;
+
+                if (data.dispensions && data.dispensions.length > 0) {
+                    // Sort dispensions based on end_date
+                    const sortedDispensions = sortDispensionsByEndDate(data.dispensions);
+
+                    sortedDispensions.forEach(dispension => {
+                        const dispensionContainer = document.createElement('div');
+                        dispensionContainer.classList.add('dispension');
+
+                        // Create separate spans for each type of information
+                        const dispensionId = createSpan('Dispension ID', dispension.dispensionID);
+                        dispensionContainer.appendChild(dispensionId);
+
+                        const userId = createSpan('User ID', dispension.user_id);
+                        dispensionContainer.appendChild(userId);
+
+                        // Add other dispension details similarly
+
+                        // Add event listener for dispension details
+                        dispensionContainer.addEventListener('click', () => {
+                            // Redirect to dispension details page
+                            window.location.href = `/dispension/${dispension.dispensionID}`;
+                        });
+
+                        // Determine if dispension is accepted and if it's future, unaccepted, or past
+                        const currentDate = new Date();
+                        const dispensionEndDate = new Date(dispension.end_date);
+
+                        if (!dispension.accepted) {
+                            unacceptedDispensionsList.appendChild(dispensionContainer);
+                        } else if (dispensionEndDate > currentDate) {
+                            futureDispensionsList.appendChild(dispensionContainer);
+                        } else {
+                            pastDispensionsList.appendChild(dispensionContainer);
+                        }
+                    });
+                } else {
+                    // Display a message when no dispensions are available
+                    unacceptedDispensionsList.innerHTML = '<p>No unaccepted dispensions available</p>';
+                    futureDispensionsList.innerHTML = '<p>No future dispensions available</p>';
+                    pastDispensionsList.innerHTML = '<p>No past dispensions available</p>';
+                }
+            } else {
+                // Redirect to login if the user is not logged in
+                window.location.href = '/login';
+            }
+        } else {
+            console.error('Data is not defined');
+        }
+
+        // Function to create a span element with specified label and value
+        function createSpan(label, value) {
+            const span = document.createElement('span');
+            span.innerHTML = `<strong>${label}:</strong> ${value}`;
+            return span;
+        }
+
+        // Function to toggle sorting order
+        function toggleSort() {
+            sortAscending = !sortAscending;
+            // Update the dispensions order without reloading the page
+            updateDispensionsOrder();
+        }
+
+        // Function to sort dispensions based on end_date
+        function sortDispensionsByEndDate(dispensions) {
+            return dispensions.slice().sort((a, b) => {
+                const dateA = new Date(a.end_date);
+                const dateB = new Date(b.end_date);
+
+                return sortAscending ? dateA - dateB : dateB - dateA;
+            });
+        }
+
+        // Function to update the dispensions order
+        function updateDispensionsOrder() {
+            // Clear the dispensions lists
+            clearDispensionsLists();
+
+            // Sort dispensions based on end_date
+            const sortedDispensions = sortDispensionsByEndDate(data.dispensions);
+
+            // Display the sorted dispensions
+            sortedDispensions.forEach(dispension => {
+                const dispensionContainer = document.createElement('div');
+                dispensionContainer.classList.add('dispension');
+
+                // Create separate spans for each type of information
+                const dispensionId = createSpan('Dispension ID', dispension.dispensionID);
+                dispensionContainer.appendChild(dispensionId);
+
+                const userId = createSpan('User ID', dispension.user_id);
+                dispensionContainer.appendChild(userId);
+
+                // Add other dispension details similarly
+
+                // Add event listener for dispension details
+                dispensionContainer.addEventListener('click', () => {
+                    // Redirect to dispension details page
+                    window.location.href = `/dispension/${dispension.dispensionID}`;
+                });
+
+                // Determine if dispension is accepted and if it's future, unaccepted, or past
+                const currentDate = new Date();
+                const dispensionEndDate = new Date(dispension.end_date);
+
+                if (!dispension.accepted) {
+                    unacceptedDispensionsList.appendChild(dispensionContainer);
+                } else if (dispensionEndDate > currentDate) {
+                    futureDispensionsList.appendChild(dispensionContainer);
+                } else {
+                    pastDispensionsList.appendChild(dispensionContainer);
+                }
+            });
+        }
+
+        // Function to clear dispensions lists
+        function clearDispensionsLists() {
+            unacceptedDispensionsList.innerHTML = '';
+            futureDispensionsList.innerHTML = '';
+            pastDispensionsList.innerHTML = '';
+        }
+    </script>
+</body>
+
+</html>
