@@ -28,7 +28,61 @@ const connection = mysql.createConnection({
     database: 'DispensenDB1',
 });
 
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/login.html');
+});
 
+app.post('/login', (req, res) => {
+    const { username, password, admin } = req.body;
+
+    const sql = 'SELECT * FROM login WHERE username = ? AND password = ? AND admin < 3';
+
+    connection.query(sql, [username, password, admin], (error, results) => {
+        if (error) {
+            console.error('Error executing SQL query:', error);
+            res.status(500).json({ error: 'Internal Server Error', message: error.message });
+        } else {
+            if (results.length > 0) {
+                const loginID = results[0].loginID;
+                const isAdmin = results[0].admin === 1;
+
+                getUserIdFromLoginID(loginID, (err, userID) => {
+                    if (err) {
+                        res.status(500).json({ error: 'Internal Server Error', message: err.message });
+                    } else {
+                        req.session.user = {
+                            username: results[0].username,
+                            loginID: loginID,
+                            userID: userID,
+                            isAdmin: isAdmin,  // Add admin flag to the session
+                        };
+
+                        res.json({ success: true });
+                    }
+                });
+            } else {
+                // Failed login
+                res.json({ success: false, message: 'Invalid credentials' });
+            }
+        }
+    });
+});
+
+// Define a middleware function to check if the user is logged in
+const requireLogin = (req, res, next) => {
+    const user = req.session.user;
+
+    // If the user is not logged in, redirect to the login page
+    if (!user) {
+        return res.redirect('/login');
+    }
+
+    // If the user is logged in, continue to the next middleware or route handler
+    next();
+};
+
+// Apply the requireLogin middleware globally to all routes
+app.use(requireLogin);
 
 app.get('/home', (req, res) => {
     const user = req.session.user;
@@ -272,51 +326,6 @@ app.post('/edit-dispension/:dispensionID', (req, res) => {
         }
     );
 });
-
-
-
-
-
-app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/login.html');
-});
-
-app.post('/login', (req, res) => {
-    const { username, password, admin } = req.body;
-
-    const sql = 'SELECT * FROM login WHERE username = ? AND password = ? AND admin < 3';
-
-    connection.query(sql, [username, password, admin], (error, results) => {
-        if (error) {
-            console.error('Error executing SQL query:', error);
-            res.status(500).json({ error: 'Internal Server Error', message: error.message });
-        } else {
-            if (results.length > 0) {
-                const loginID = results[0].loginID;
-                const isAdmin = results[0].admin === 1;
-
-                getUserIdFromLoginID(loginID, (err, userID) => {
-                    if (err) {
-                        res.status(500).json({ error: 'Internal Server Error', message: err.message });
-                    } else {
-                        req.session.user = {
-                            username: results[0].username,
-                            loginID: loginID,
-                            userID: userID,
-                            isAdmin: isAdmin,  // Add admin flag to the session
-                        };
-
-                        res.json({ success: true });
-                    }
-                });
-            } else {
-                // Failed login
-                res.json({ success: false, message: 'Invalid credentials' });
-            }
-        }
-    });
-});
-
 
 app.get('/submit', (req, res) => {
     res.sendFile(__dirname + '/add-dispension.html');
