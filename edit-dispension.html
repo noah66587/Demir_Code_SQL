@@ -2,11 +2,15 @@
 <html lang="en">
 
 <head>
+    <script>
+        /* DISPENSION_DATA_PLACEHOLDER */
+        /* DROPDOWN_DATA_PLACEHOLDER */
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Dispension</title>
     <style>
-body {
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f3f4;
             color: #2c3e50;
@@ -70,57 +74,13 @@ body {
         <input type="date" id="endDate" name="endDate" required>
 
         <label for="reason">Reason:</label>
-        <select id="reason" name="reason">
-            <!-- Populate options dynamically based on your database -->
-            <option value="0">Select</option>
-            <option value="1">Medical</option>
-            <option value="2">Family Emergency</option>
-            <option value="3">Personal</option>
-            <option value="4">Other</option>
-            <option value="5">Unknown</option>
-            <!-- Add more options as needed -->
-        </select>
+        <select id="reason" name="reason"></select>
 
         <label for="job">Job:</label>
-        <select id="job" name="job">
-            <!-- Populate options dynamically based on your database -->
-            <option value="0">Select</option>
-            <option value="1">Mediamatiker/Mediamatikerin</option>
-            <option value="2">Informatiker/Informatikerin</option>
-            <option value="3">Kauffrau/Kaufmann</option>
-            <option value="4">Fachmann/Fachfrau Betreuung</option>
-            <!-- Add more options as needed -->
-        </select>
+        <select id="job" name="job"></select>
 
         <label for="lesson">Lessons:</label>
-        <select id="lesson" name="lesson">
-            <!-- Populate options dynamically based on your database -->
-            <option value="0">Select</option>
-<<<<<<< HEAD
-            <option value="1">M102</option>
-            <option value="2">M202</option>
-            <option value="3">M303</option>
-            <option value="4">M404</option>
-            <option value="5">M505</option>
-            <option value="6">M606</option>
-            <option value="7">M707</option>
-            <option value="8">M808</option>
-            <option value="9">M909</option>
-            <option value="10">M010</option>
-=======
-            <option value="1">M258</option>
-            <option value="2">M261</option>
-            <option value="3">M264</option>
-            <option value="4">M267</option>
-            <option value="5">M270</option>
-            <option value="6">M273</option>
-            <option value="7">M276</option>
-            <option value="8">M279</option>
-            <option value="9">M282</option>
-            <option value="10">M285</option>
->>>>>>> 7258d03 (Test Commit of recent changes. Redid the .sql)
-            <!-- Add more options as needed -->
-        </select>
+        <select id="lesson" name="lesson"></select>
 
         <label for="teachers">Teachers:</label>
         <textarea id="teachers" name="teachers" rows="4" placeholder="Enter your teachers..."></textarea>
@@ -133,60 +93,111 @@ body {
 
         <label for="comment">Comment:</label>
         <textarea id="comment" name="comment" rows="4" placeholder="Enter your comment..."></textarea>
+        
         <button type="button" onclick="saveChanges()">Save Changes</button>
     </form>
 
     <script>
-        /* DISPENSION_DATA_PLACEHOLDER */;
-    
-    function saveChanges() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const reasonID = document.getElementById('reason').value;
-        const jobID = document.getElementById('job').value;
-        const lessonID = document.getElementById('lesson').value;
-        const teachers = document.getElementById('teachers').value;
-        const workCheck = document.getElementById('workCheck').checked ? 1 : 0;
-        const parentCheck = document.getElementById('parentCheck').checked ? 1 : 0;
-        const comment = document.getElementById('comment').value;
+        // Update form fields with dispension data
+        document.getElementById('startDate').value = formatDate(dispensionData.start_date);
+        document.getElementById('endDate').value = formatDate(dispensionData.end_date);
+        document.getElementById('reason').value = dispensionData.reasonID;
+        document.getElementById('job').value = dispensionData.jobID;
+        document.getElementById('lesson').value = dispensionData.lessionID;
+        document.getElementById('teachers').value = dispensionData.teachers;
+        document.getElementById('workCheck').checked = dispensionData.work_check === 1;
+        document.getElementById('parentCheck').checked = dispensionData.parent_check === 1;
+        document.getElementById('comment').value = dispensionData.comment;
 
-        fetch(`/edit-dispension/${dispensionData.dispensionID}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                startDate,
-                endDate,
-                reasonID,
-                jobID,
-                lessonID,
-                teachers,
-                workCheck,
-                parentCheck,
-                comment,
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Dispension updated successfully!');
-                window.location.href = '/home';
-            } else {
-                alert('Failed to update dispension. Please check your inputs.');
-            }
-        })
-        .catch(error => {
-            console.error('Error updating dispension:', error);
-            alert('An error occurred while updating the dispension.');
-        });
-    }
+        // Fetch dropdown data
+        fetch('/dropdownData')
+            .then(response => response.json())
+            .then(data => {
+                const reasonSelect = document.getElementById('reason');
+                const jobSelect = document.getElementById('job');
+                const lessonSelect = document.getElementById('lesson');
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-</script>
+                // Populate reasons dropdown
+                data.reasons.forEach(reason => {
+                    const option = document.createElement('option');
+                    option.value = reason.id;
+                    option.textContent = reason.name;
+                    reasonSelect.appendChild(option);
+                });
+
+                // Populate jobs dropdown
+                data.jobs.forEach(job => {
+                    const option = document.createElement('option');
+                    option.value = job.id;
+                    option.textContent = job.name;
+                    jobSelect.appendChild(option);
+                });
+
+                // Populate lessons dropdown
+                data.lessons.forEach(lesson => {
+                    const option = document.createElement('option');
+                    option.value = lesson.id;
+                    option.textContent = lesson.name;
+                    lessonSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching dropdown data:', error);
+                alert('An error occurred while fetching dropdown data.');
+            });
+
+        function saveChanges() {
+            // Get updated values from the form
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const reasonID = document.getElementById('reason').value;
+            const jobID = document.getElementById('job').value;
+            const lessonID = document.getElementById('lesson').value;
+            const teachers = document.getElementById('teachers').value;
+            const workCheck = document.getElementById('workCheck').checked ? 1 : 0;
+            const parentCheck = document.getElementById('parentCheck').checked ? 1 : 0;
+            const comment = document.getElementById('comment').value;
+
+            // Send the updated data to the server
+            fetch(`/edit-dispension/${dispensionData.dispensionID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    startDate,
+                    endDate,
+                    reasonID,
+                    jobID,
+                    lessonID,
+                    teachers,
+                    workCheck,
+                    parentCheck,
+                    comment,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Dispension updated successfully!');
+                    window.location.href = '/home';
+                } else {
+                    alert('Failed to update dispension. Please check your inputs.');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating dispension:', error);
+                alert('An error occurred while updating the dispension.');
+            });
+        }
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+    </script>
+</body>
+
+</html>

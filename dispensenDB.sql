@@ -1,4 +1,5 @@
 drop database DispensenDB1;
+drop table dispensions;
 create database DispensenDB1;
 
 use DispensenDB1;
@@ -76,6 +77,7 @@ CREATE TABLE dispensions (
   parent_check BOOLEAN,
   JobID INT,
   fileID INT,
+  accepted INT DEFAULT 0,
   FOREIGN KEY (userID) REFERENCES user(user_id),
   FOREIGN KEY (reasonID) REFERENCES reasons(reasonID),
   FOREIGN KEY (lessionID) REFERENCES lessions(lessionID),
@@ -155,15 +157,14 @@ INSERT INTO user (loginID, locationID, genderID, name, surname, email, phone_num
 (9, 1, 1, 'Liam', 'Anderson', 'liam.a@example.com', '4567890123', 'ClassC'),
 (10, 1, 2, 'Ava', 'White', 'ava.w@example.com', '5678901234', 'ClassA');
 
-INSERT INTO dispensions (userID, start_date, end_date, reasonID, comment, lessionID, teachers, work_check, parent_check, JobID, fileID) VALUES
-(1, '2023-01-01', '2023-01-05', 1, 'Medical leave', 1, 'Mr. Smith', 1, 1, 2, 1),
-(2, '2023-02-01', '2023-02-05', 2, 'Family emergency', 2, 'Mrs. Johnson', 1, 1, 1, 2),
-(3, '2023-03-01', '2023-03-05', 3, 'Personal reasons', 3, 'Mr. Davis', 1, 1, 2, 1),
-(4, '2023-04-01', '2023-04-05', 4, 'Other reason', 4, 'Ms. Williams', 1, 1, 3, 2),
-(5, '2023-05-01', '2023-05-05', 5, 'Unknown reason', 5, 'Mr. Brown', 1, 1, 4, 3),
-(6, '2023-06-01', '2023-06-05', 1, 'Medical leave', 1, 'Mr. Smith', 1, 1, 2, 1),
-(7, '2023-07-01', '2023-07-05', 2, 'Family emergency', 2, 'Mrs. Johnson', 1, 1, 3, 2),
-(8, '2023-08-01', '2023-08-05', 3, 'Personal reasons', 3, 'Mr. Davis', 1, 1, 4, 3),
-(9, '2023-09-01', '2023-09-05', 4, 'Other reason', 4, 'Ms. Williams', 1, 1, 2, 4),
-(10, '2023-10-01', '2023-10-05', 5, 'Unknown reason', 5, 'Mr. Brown', 1, 1, 1, 5);
-
+INSERT INTO dispensions (userID, start_date, end_date, reasonID, comment, lessionID, teachers, work_check, parent_check, JobID, fileID, accepted) VALUES
+(1, '2023-01-01', '2023-01-05', 1, 'Medical leave', 1, 'Mr. Smith', 1, 1, 2, 1,0),
+(2, '2023-02-01', '2023-02-05', 2, 'Family emergency', 2, 'Mrs. Johnson', 1, 1, 1, 2,0),
+(3, '2023-03-01', '2023-03-05', 3, 'Personal reasons', 3, 'Mr. Davis', 1, 1, 2, 1,0),
+(4, '2023-04-01', '2023-04-05', 4, 'Other reason', 4, 'Ms. Williams', 1, 1, 3, 2,0),
+(5, '2023-05-01', '2023-05-05', 5, 'Unknown reason', 5, 'Mr. Brown', 1, 1, 4, 3,0),
+(6, '2023-06-01', '2023-06-05', 1, 'Medical leave', 1, 'Mr. Smith', 1, 1, 2, 1,0),
+(7, '2023-07-01', '2023-07-05', 2, 'Family emergency', 2, 'Mrs. Johnson', 1, 1, 3, 2,0),
+(8, '2023-08-01', '2023-08-05', 3, 'Personal reasons', 3, 'Mr. Davis', 1, 1, 4, 3,0),
+(9, '2023-09-01', '2023-09-05', 4, 'Other reason', 4, 'Ms. Williams', 1, 1, 2, 4,0),
+(10, '2023-10-01', '2023-10-05', 5, 'Unknown reason', 5, 'Mr. Brown', 1, 1, 1, 5,0);

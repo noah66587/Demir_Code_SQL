@@ -25,7 +25,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'NWD2ATc.thiUAih2Pa9ng@P@',
-    database: 'DispensenDB',
+    database: 'DispensenDB1',
 });
 
 
@@ -193,12 +193,43 @@ app.get('/edit-dispension/:dispensionID', (req, res) => {
             if (results.length > 0) {
                 const dispensionData = results[0];
 
+                // Read the HTML template
                 const htmlTemplate = fs.readFileSync(path.join(__dirname, 'edit-dispension.html'), 'utf-8');
-                const updatedHtml = htmlTemplate.replace('/* DISPENSION_DATA_PLACEHOLDER */', `
-                    const dispensionData = ${JSON.stringify(dispensionData)};
-                `);
 
-                res.send(updatedHtml);
+                // Read and send the dropdown data
+                const getReasonsSql = 'SELECT reasonID as id, reason as name FROM reasons';
+                const getJobsSql = 'SELECT jobID as id, job as name FROM jobs';
+                const getLessonsSql = 'SELECT lessionID as id, lession as name FROM lessions';
+
+                // Use Promise.all to execute queries concurrently
+                Promise.all([
+                    queryPromise(connection, getReasonsSql),
+                    queryPromise(connection, getJobsSql),
+                    queryPromise(connection, getLessonsSql),
+                ])
+                    .then(([reasons, jobs, lessons]) => {
+                        const dropdownData = {
+                            reasons,
+                            jobs,
+                            lessons,
+                        };
+
+                        // Replace placeholders in the HTML template
+                        const updatedHtml = htmlTemplate
+                            .replace('/* DISPENSION_DATA_PLACEHOLDER */', `
+                                const dispensionData = ${JSON.stringify(dispensionData)};
+                            `)
+                            .replace('/* DROPDOWN_DATA_PLACEHOLDER */', `
+                                const dropdownData = ${JSON.stringify(dropdownData)};
+                            `);
+
+                        // Send the updated HTML to the client
+                        res.send(updatedHtml);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching dropdown data:', error);
+                        res.status(500).json({ error: 'Internal server error' });
+                    });
             } else {
                 res.status(404).json({ error: 'Not Found', message: 'Dispension not found' });
             }
@@ -291,7 +322,29 @@ app.get('/submit', (req, res) => {
     res.sendFile(__dirname + '/add-dispension.html');
 });
 
-// Use multer middleware for handling file uploads
+// Add a new route for fetching dropdown data
+app.get('/dropdownData', (req, res) => {
+    // Fetch data for dropdowns from the database
+    const getReasonsSql = 'SELECT reasonID as id, reason as name FROM reasons';
+    const getJobsSql = 'SELECT jobID as id, job as name FROM jobs';
+    const getLessonsSql = 'SELECT lessionID as id, lession as name FROM lessions';
+
+    // Use Promise.all to execute queries concurrently
+    Promise.all([
+        queryPromise(connection, getReasonsSql),
+        queryPromise(connection, getJobsSql),
+        queryPromise(connection, getLessonsSql),
+    ])
+    .then(([reasons, jobs, lessons]) => {
+        // Send the fetched data as JSON response
+        res.json({ reasons, jobs, lessons });
+    })
+    .catch(error => {
+        console.error('Error fetching dropdown data:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
 app.post('/submit', upload.single('fileInput'), (req, res) => {
     // Ensure user is logged in
     const user = req.session.user;
@@ -319,7 +372,7 @@ app.post('/submit', upload.single('fileInput'), (req, res) => {
 
     // Insert file data into the files table
     const fileSql = 'INSERT INTO files (file_name, file_data) VALUES (?, ?)';
-    connection.query(fileSql, [fileInput.originalname, fileInput.buffer], (fileError, fileResults) => {
+    connection.query(fileSql, [fileInput.originalname, fileInput.mimetype], (fileError, fileResults) => {
         if (fileError) {
             console.error('Error inserting file:', fileError);
             return res.status(500).json({ error: 'Internal Server Error', message: fileError.message });
@@ -344,9 +397,6 @@ app.post('/submit', upload.single('fileInput'), (req, res) => {
         );
     });
 });
-
-// Add these routes in your server.js or routes file
-
 
 app.get('/admin', (req, res) => {
     const admin = req.session.user;
@@ -476,7 +526,17 @@ app.post('/admin/dispension/:dispensionID/accept', (req, res) => {
     }
 });
 
-
+function queryPromise(connection, sql) {
+    return new Promise((resolve, reject) => {
+        connection.query(sql, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
 
 // Your function to get userID based on loginID
 function getUserIdFromLoginID(loginID, callback) {
