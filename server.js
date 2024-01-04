@@ -24,7 +24,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'root_password',
-    database: 'DispensenDB1',
+    database: 'DispensenDB',
 });
 
 app.get('/login', (req, res) => {
