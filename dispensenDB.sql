@@ -1,14 +1,12 @@
-drop database DispensenDB1;
-drop table dispensions;
-create database DispensenDB1;
+create database DispensenDB;
 
-use DispensenDB1;
+use DispensenDB;
 
 CREATE TABLE IF NOT EXISTS login(
     loginID int primary key auto_increment,
     username varchar(255) not null ,
     password varchar(255) not null ,
-    admin tinyint
+    admin tinyint DEFAULT 0
 );
 
 create table if not exists files
@@ -131,7 +129,27 @@ INSERT INTO files (file_name, file_data) VALUES
 ('file7.png','URL'),
 ('file8.docx','URL'),
 ('file9.pdf','URL'),
-('file10.jpg','URL');
+('file10.jpg','URL'),
+('file11.pdf','URL'),
+('file12.docx','URL'),
+('file13.txt','URL'),
+('file14.jpg','URL'),
+('file15.png','URL'),
+('file16.xlsx','URL'),
+('file17.png','URL'),
+('file18.docx','URL'),
+('file19.pdf','URL'),
+('file20.jpg','URL')
+('file21.pdf','URL'),
+('file22.docx','URL'),
+('file23.txt','URL'),
+('file24.jpg','URL'),
+('file25.png','URL'),
+('file26.xlsx','URL'),
+('file27.png','URL'),
+('file28.docx','URL'),
+('file29.pdf','URL'),
+('file30.jpg','URL');
 
 INSERT INTO lessions (lession) VALUES
 ('M258'),
@@ -146,25 +164,46 @@ INSERT INTO lessions (lession) VALUES
 ('M285');
 
 INSERT INTO user (loginID, locationID, genderID, name, surname, email, phone_number, class) VALUES
-(1, 1, 1, 'John', 'Doe', 'john.doe@example.com', '1234567890', 'ClassA'),
-(2, 2, 2, 'Alice', 'Johnson', 'alice.j@example.com', '9876543210', 'ClassB'),
-(3, 3, 1, 'Bob', 'Williams', 'bob.w@example.com', '4567890123', 'ClassC'),
-(4, 1, 2, 'Eva', 'Davis', 'eva.d@example.com', '7890123456', 'ClassA'),
-(5, 1, 1, 'Charlie', 'Smith', 'charlie.s@example.com', '5678901234', 'ClassB'),
-(6, 1, 2, 'Sophia', 'Brown', 'sophia.b@example.com', '8901234567', 'ClassC'),
-(7, 2, 1, 'Henry', 'Jones', 'henry.j@example.com', '2345678901', 'ClassA'),
-(8, 1, 2, 'Olivia', 'Taylor', 'olivia.t@example.com', '3456789012', 'ClassB'),
-(9, 1, 1, 'Liam', 'Anderson', 'liam.a@example.com', '4567890123', 'ClassC'),
-(10, 1, 2, 'Ava', 'White', 'ava.w@example.com', '5678901234', 'ClassA');
+(1, 1, 1, 'Noah', 'Müller', 'noah.muller@gmail.com', '079 123 23 42', 'ClassA'),
+(2, 2, 2, 'Mia', 'Meier', 'mia.meier@hotmail.com', '078 234 34 53', 'ClassB'),
+(3, 3, 1, 'Luca', 'Schmid', 'luca.schmid@outlook.com', '077 345 45 64', 'ClassC'),
+(4, 1, 2, 'Emma', 'Keller', 'emma.keller@yahoo.com', '076 456 56 75', 'ClassA'),
+(5, 1, 1, 'Leon', 'Weber', 'leon.weber@gmail.com', '079 567 67 86', 'ClassB'),
+(6, 1, 2, 'Sofia', 'Schneider', 'sofia.schneider@outlook.com', '078 678 78 97', 'ClassC'),
+(7, 2, 1, 'Gabriel', 'Huber', 'gabriel.huber@yahoo.com', '077 789 89 01', 'ClassA'),
+(8, 1, 2, 'Lina', 'Meyer', 'lina.meyer@gmail.com', '076 890 90 12', 'ClassB'),
+(9, 1, 1, 'Elias', 'Steiner', 'elias.steiner@yahoo.com', '079 901 01 23', 'ClassC'),
+(10, 1, 3, 'Alex', 'Suter', 'alex.suter@gmail.com', '079 234 34 56', 'ClassB');
 
-INSERT INTO dispensions (userID, start_date, end_date, reasonID, comment, lessionID, teachers, work_check, parent_check, JobID, fileID, accepted) VALUES
-(1, '2023-01-01', '2023-01-05', 1, 'Medical leave', 1, 'Mr. Smith', 1, 1, 2, 1,0),
-(2, '2023-02-01', '2023-02-05', 2, 'Family emergency', 2, 'Mrs. Johnson', 1, 1, 1, 2,0),
-(3, '2023-03-01', '2023-03-05', 3, 'Personal reasons', 3, 'Mr. Davis', 1, 1, 2, 1,0),
-(4, '2023-04-01', '2023-04-05', 4, 'Other reason', 4, 'Ms. Williams', 1, 1, 3, 2,0),
-(5, '2023-05-01', '2023-05-05', 5, 'Unknown reason', 5, 'Mr. Brown', 1, 1, 4, 3,0),
-(6, '2023-06-01', '2023-06-05', 1, 'Medical leave', 1, 'Mr. Smith', 1, 1, 2, 1,0),
-(7, '2023-07-01', '2023-07-05', 2, 'Family emergency', 2, 'Mrs. Johnson', 1, 1, 3, 2,0),
-(8, '2023-08-01', '2023-08-05', 3, 'Personal reasons', 3, 'Mr. Davis', 1, 1, 4, 3,0),
-(9, '2023-09-01', '2023-09-05', 4, 'Other reason', 4, 'Ms. Williams', 1, 1, 2, 4,0),
-(10, '2023-10-01', '2023-10-05', 5, 'Unknown reason', 5, 'Mr. Brown', 1, 1, 1, 5,0);
+
+INSERT INTO dispensions (userID, start_date, end_date, reasonID, comment, lessionID, teachers, work_check, parent_check, JobID, fileID, accepted)
+VALUES
+(1, '2023-01-01', '2023-01-05', 2, 'I will be attending a medical appointment on these dates. It is essential for my health check-up.', 1, 'Mr. Smith', 1, 1, 2, 1, 1), -- Past and accepted
+(1, '2024-02-10', '2024-02-15', 3, 'A sudden family emergency requires my immediate attention and presence. I need to be with my family during this tough time.', 1, 'Mr. Smith', 1, 1, 2, 2, 1), -- Future and accepted
+(1, '2024-03-01', '2024-03-05', 1, 'I require a personal day off to handle some private matters. Urgent personal business demands my attention.', 1, 'Mr. Smith', 1, 1, 2, 3, 0), -- Future and not accepted
+(2, '2023-02-01', '2023-02-05', 4, 'Due to unforeseen circumstances, I wont be able to attend class on these dates. An unexpected situation has arisen, and I need some time to deal with it.', 2, 'Mrs. Johnson', 1, 1, 3, 4, 1), -- Past and accepted
+(2, '2024-02-20', '2024-02-25', 2, 'I will be out of town for a family funeral during this period. I need time off to attend this important family event.', 2, 'Mrs. Johnson', 1, 1, 3, 5, 0), -- Future and not accepted
+(2, '2024-03-01', '2024-03-05', 5, 'I have an unknown situation that requires my absence from class. Unforeseen circumstances prevent my attendance. I appreciate your understanding.', 2, 'Mrs. Johnson', 1, 1, 3, 6, 1), -- Future and accepted
+(3, '2023-03-01', '2023-03-05', 1, 'Medical reasons prevent me from attending class on these dates. Health issues need my immediate attention. I will keep you updated on my progress.', 3, 'Mr. Davis', 1, 1, 4, 7, 1), -- Past and accepted
+(3, '2024-03-10', '2024-03-15', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 3, 'Mr. Davis', 1, 1, 4, 8, 1), -- Future and accepted
+(3, '2024-04-01', '2024-04-05', 4, 'I have an unusual circumstance preventing me from attending class on these dates. An unexpected situation has arisen. Your understanding is highly appreciated.', 3, 'Mr. Davis', 1, 1, 4, 9, 0), -- Future and not accepted
+(4, '2023-04-01', '2023-04-05', 5, 'Due to an unknown situation, I will be absent from class during this period. Unforeseen circumstances prevent my attendance. I apologize for any inconvenience.', 4, 'Ms. Williams', 1, 1, 3, 10, 1), -- Past and accepted
+(4, '2024-04-10', '2024-04-15', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 4, 'Ms. Williams', 1, 1, 3, 11, 1), -- Future and accepted
+(4, '2024-05-01', '2024-05-05', 1, 'Medical reasons require me to take a day off from class. Health issues need my immediate attention. Thank you for your support.', 4, 'Ms. Williams', 1, 1, 3, 12, 0), -- Future and not accepted
+(5, '2023-05-01', '2023-05-05', 4, 'Unforeseen circumstances prevent me from attending class on these dates. An unexpected situation has arisen. I appreciate your understanding during this time.', 5, 'Mr. Brown', 1, 1, 4, 13, 1), -- Past and accepted
+(5, '2024-05-10', '2024-05-15', 3, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 5, 'Mr. Brown', 1, 1, 4, 15, 0); -- Future and not accepted
+(6, '2023-06-01', '2023-06-05', 5, 'Due to an unknown situation, I will be absent from class on these dates. Unforeseen circumstances prevent my attendance. I appreciate your understanding during this time.', 1, 'Mr. Smith', 1, 1, 2, 16, 1), -- Past and accepted
+(6, '2024-06-10', '2024-06-15', 4, 'I have an unusual circumstance preventing me from attending class on these dates. An unexpected situation has arisen. Thank you for your support.', 1, 'Mr. Smith', 1, 1, 2, 17, 1), -- Future and accepted
+(6, '2024-07-01', '2024-07-05', 1, 'Medical reasons prevent me from attending class on these dates. Health issues need my immediate attention. Your understanding is much appreciated.', 1, 'Mr. Smith', 1, 1, 2, 18, 0); -- Future and not accepted
+(7, '2023-07-01', '2023-07-05', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 2, 'Mrs. Johnson', 1, 1, 3, 19, 1), -- Past and accepted
+(7, '2024-07-10', '2024-07-15', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 2, 'Mrs. Johnson', 1, 1, 3, 20, 1), -- Future and accepted
+(7, '2024-08-01', '2024-08-05', 5, 'Due to an unknown situation, I will be absent from class on these dates. Unforeseen circumstances prevent my attendance. I apologize for any inconvenience.', 2, 'Mrs. Johnson', 1, 1, 3, 21, 0); -- Future and not accepted
+(8, '2023-08-01', '2023-08-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 3, 'Mr. Davis', 1, 1, 1, 22, 1), -- Past and accepted
+(8, '2024-08-10', '2024-08-15', 1, 'Medical reasons prevent me from attending class on these dates. Health issues need my immediate attention. Thank you for your understanding.', 3, 'Mr. Davis', 1, 1, 1, 23, 1), -- Future and accepted
+(8, '2024-09-01', '2024-09-05', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 3, 'Mr. Davis', 1, 1, 1, 24, 0); -- Future and not accepted
+(9, '2023-09-01', '2023-09-05', 4, 'I have an unusual circumstance preventing me from attending class on these dates. An unexpected situation has arisen. I appreciate your understanding during this time.', 4, 'Ms. Williams', 1, 1, 1, 25, 1), -- Past and accepted
+(9, '2024-09-10', '2024-09-15', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 4, 'Ms. Williams', 1, 1, 1, 26, 1), -- Future and accepted
+(9, '2024-10-01', '2024-10-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 4, 'Ms. Williams', 1, 1, 1, 27, 0); -- Future and not accepted
+(10, '2023-10-01', '2023-10-05', 1, 'Medical reasons require me to take a day off from class. Health issues need my immediate attention. I will keep you updated on my progress.', 5, 'Mr. Brown', 1, 1, 4, 28, 1), -- Past and accepted
+(10, '2024-10-10', '2024-10-15', 4, 'Unforeseen circumstances prevent me from attending class on these dates. An unexpected situation has arisen. I apologize for any inconvenience.', 5, 'Mr. Brown', 1, 1, 4, 29, 1), -- Future and accepted
+(10, '2024-11-01', '2024-11-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 5, 'Mr. Brown', 1, 1, 4, 30, 0); -- Future and not accepted
