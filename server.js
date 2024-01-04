@@ -23,8 +23,8 @@ const upload = multer({ storage: storage });
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root_password',
-    database: 'DispensenDB',
+    password: 'sql_root_password',
+    database: 'DispensenDB1',
 });
 
 app.get('/login', (req, res) => {

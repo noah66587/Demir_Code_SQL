@@ -29,7 +29,7 @@
         .dispensions-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 50px;
             justify-content: center;
         }
 
@@ -103,7 +103,6 @@
         let unacceptedDispensionsList;
         let futureDispensionsList;
         let pastDispensionsList;
-
         // Ensure data is defined before using it
         if (typeof data !== 'undefined') {
             const usernameElement = document.getElementById('username');
@@ -112,10 +111,18 @@
             pastDispensionsList = document.getElementById('pastDispensions');
 
             if (data.user) {
-                usernameElement.textContent = data.user.username;
-
+                // Assuming the dispensions array is not empty
                 if (data.dispensions && data.dispensions.length > 0) {
-                    // Sort dispensions based on end_date
+                    const dispension = data.dispensions[0]; // Assuming you want the name from the first dispension
+
+                    const name = dispension.name;
+                    const surname = dispension.surname;
+
+                    // Assuming you want to display both name and surname
+                    const fullName = `${name} ${surname}`;
+
+                    usernameElement.textContent = fullName;
+
                     const sortedDispensions = sortDispensionsByEndDate(data.dispensions);
 
                     sortedDispensions.forEach(dispension => {
@@ -129,6 +136,8 @@
                         const userId = createSpan('User ID', dispension.user_id);
                         dispensionContainer.appendChild(userId);
 
+                        const name = createSpan('Name', dispension.name);
+                        dispensionContainer.appendChild(name);
                         // Add other dispension details similarly
 
                         // Add event listener for dispension details
