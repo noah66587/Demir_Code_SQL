@@ -23,8 +23,8 @@ const upload = multer({ storage: storage });
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'sql_root_password',
-    database: 'DispensenDB1',
+    password: 'eL2R69fz_g!oE6-2yd7Q-KmX',
+    database: 'DispensenDB',
 });
 
 app.get('/login', (req, res) => {
@@ -94,7 +94,7 @@ app.get('/home', (req, res) => {
             res.redirect('/admin');
         } else {
             // Redirect normal user to the normal home page
-            const sql = 'SELECT d.dispensionID, u.user_id, d.start_date, d.end_date, u.name, u.surname, u.email, u.phone_number, u.class, l.location, r.reason, r.reason_abrev, j.job, d.accepted FROM dispensions d JOIN user u ON d.userID = u.user_id JOIN locations l ON u.locationID = l.locationID JOIN reasons r ON r.reasonID = d.reasonID JOIN jobs j ON j.jobID = d.jobID WHERE d.userID = ? ORDER BY d.end_date;';
+            const sql = 'SELECT d.dispensionID, u.user_id, d.start_date, d.end_date, u.name, u.surname, u.email, u.phone_number, u.class, l.location, r.reason, r.reason_abrev, j.job, le.lession ,d.accepted FROM dispensions d JOIN user u ON d.userID = u.user_id JOIN locations l ON u.locationID = l.locationID JOIN reasons r ON r.reasonID = d.reasonID JOIN jobs j ON j.jobID = d.jobID JOIN lessions le on d.lessionID = le.lessionID WHERE d.userID = ? ORDER BY d.end_date;';
 
             connection.query(sql, [user.userID], (error, results) => {
                 if (error) {
@@ -412,7 +412,7 @@ app.get('/admin', (req, res) => {
     if (!admin || !admin.isAdmin) {
         res.redirect('/login');
     } else {
-        const sql = 'SELECT * FROM dispensions WHERE accepted = 0 ORDER BY end_date;';
+        const sql = 'SELECT d.dispensionID, u.user_id, d.start_date, d.end_date, u.name, u.surname, u.email, u.phone_number, u.class, l.location, r.reason, r.reason_abrev, j.job, le.lession , d.accepted FROM dispensions d JOIN user u ON d.userID = u.user_id JOIN locations l ON u.locationID = l.locationID JOIN reasons r ON r.reasonID = d.reasonID JOIN jobs j ON j.jobID = d.jobID JOIN lessions le on le.lessionID = d.lessionID WHERE d.accepted = 0 ORDER BY d.end_date;';
 
         connection.query(sql, (error, results) => {
             if (error) {
