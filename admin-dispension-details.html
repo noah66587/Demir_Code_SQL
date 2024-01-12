@@ -28,6 +28,7 @@
 
         #dispensionDetails {
             margin-top: 20px;
+            width: 30%;
         }
 
         #acceptCheckbox {
@@ -148,12 +149,22 @@
 
             // Create a table for dispension details
             const dispensionTable = document.createElement('table');
-            
+
             // Add dispension details as rows in the table
             addTableRow('Dispension ID', dispensionData.dispensionID);
             addTableRow('Start Date', formatDate(dispensionData.start_date));
             addTableRow('End Date', formatDate(dispensionData.end_date));
+            addTableRow('Name', dispensionData.name);
+            addTableRow('Surname', dispensionData.surname);
+            addTableRow('Reason', dispensionData.reason);
+            addTableRow('Class', dispensionData.class);
+            addTableRow('Lesson', dispensionData.lession);
+            addTableRow('Teachers', dispensionData.teachers);
+            addTableRow('Job', dispensionData.job);
+            addTableRow('Comment', dispensionData.comment);
             addTableRow('File Name', dispensionData.file_name);
+            addTableRow('Phone Number', dispensionData.phone_number);
+            addTableRow('Email', dispensionData.email);
 
             // Add other dispension details similarly
 
