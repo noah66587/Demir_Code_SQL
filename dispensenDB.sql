@@ -1,5 +1,4 @@
 create database DispensenDB;
-
 use DispensenDB;
 
 CREATE TABLE IF NOT EXISTS login(
@@ -119,37 +118,38 @@ INSERT INTO jobs (job) VALUES
 ('Kauffrau/Kaufmann'),
 ('Fachmann/Fachfrau Betreuung');
 
-INSERT INTO files (file_name, file_data) VALUES
-('file1.pdf','URL'),
-('file2.docx','URL'),
-('file3.txt','URL'),
-('file4.jpg','URL'),
-('file5.png','URL'),
-('file6.xlsx','URL'),
-('file7.png','URL'),
-('file8.docx','URL'),
-('file9.pdf','URL'),
-('file10.jpg','URL'),
-('file11.pdf','URL'),
-('file12.docx','URL'),
-('file13.txt','URL'),
-('file14.jpg','URL'),
-('file15.png','URL'),
-('file16.xlsx','URL'),
-('file17.png','URL'),
-('file18.docx','URL'),
-('file19.pdf','URL'),
-('file20.jpg','URL')
-('file21.pdf','URL'),
-('file22.docx','URL'),
-('file23.txt','URL'),
-('file24.jpg','URL'),
-('file25.png','URL'),
-('file26.xlsx','URL'),
-('file27.png','URL'),
-('file28.docx','URL'),
-('file29.pdf','URL'),
-('file30.jpg','URL');
+
+INSERT INTO files (fileID, file_name, file_data) VALUES
+(0,'file1.pdf','URL'),
+(0,'file2.docx','URL'),
+(0,'file3.txt','URL'),
+(0,'file4.jpg','URL'),
+(0,'file5.png','URL'),
+(0,'file6.xlsx','URL'),
+(0,'file7.png','URL'),
+(0,'file8.docx','URL'),
+(0,'file9.pdf','URL'),
+(0,'file10.jpg','URL'),
+(0,'file11.pdf','URL'),
+(0,'file12.docx','URL'),
+(0,'file13.txt','URL'),
+(0,'file14.jpg','URL'),
+(0,'file15.png','URL'),
+(0,'file16.xlsx','URL'),
+(0,'file17.png','URL'),
+(0,'file18.docx','URL'),
+(0,'file19.pdf','URL'),
+(0,'file20.jpg','URL'),
+(0,'file21.pdf','URL'),
+(0,'file22.docx','URL'),
+(0,'file23.txt','URL'),
+(0,'file24.jpg','URL'),
+(0,'file25.png','URL'),
+(0,'file26.xlsx','URL'),
+(0,'file27.png','URL'),
+(0,'file28.docx','URL'),
+(0,'file29.pdf','URL'),
+(0,'file30.jpg','URL');
 
 INSERT INTO lessions (lession) VALUES
 ('M258'),
@@ -191,19 +191,20 @@ VALUES
 (4, '2024-04-10', '2024-04-15', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 4, 'Ms. Williams', 1, 1, 3, 11, 1), -- Future and accepted
 (4, '2024-05-01', '2024-05-05', 1, 'Medical reasons require me to take a day off from class. Health issues need my immediate attention. Thank you for your support.', 4, 'Ms. Williams', 1, 1, 3, 12, 0), -- Future and not accepted
 (5, '2023-05-01', '2023-05-05', 4, 'Unforeseen circumstances prevent me from attending class on these dates. An unexpected situation has arisen. I appreciate your understanding during this time.', 5, 'Mr. Brown', 1, 1, 4, 13, 1), -- Past and accepted
-(5, '2024-05-10', '2024-05-15', 3, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 5, 'Mr. Brown', 1, 1, 4, 15, 0); -- Future and not accepted
+(5, '2024-05-10', '2024-05-15', 3, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 5, 'Mr. Brown', 1, 1, 4, 15, 0), -- Future and not accepted
 (6, '2023-06-01', '2023-06-05', 5, 'Due to an unknown situation, I will be absent from class on these dates. Unforeseen circumstances prevent my attendance. I appreciate your understanding during this time.', 1, 'Mr. Smith', 1, 1, 2, 16, 1), -- Past and accepted
 (6, '2024-06-10', '2024-06-15', 4, 'I have an unusual circumstance preventing me from attending class on these dates. An unexpected situation has arisen. Thank you for your support.', 1, 'Mr. Smith', 1, 1, 2, 17, 1), -- Future and accepted
-(6, '2024-07-01', '2024-07-05', 1, 'Medical reasons prevent me from attending class on these dates. Health issues need my immediate attention. Your understanding is much appreciated.', 1, 'Mr. Smith', 1, 1, 2, 18, 0); -- Future and not accepted
+(6, '2024-07-01', '2024-07-05', 1, 'Medical reasons prevent me from attending class on these dates. Health issues need my immediate attention. Your understanding is much appreciated.', 1, 'Mr. Smith', 1, 1, 2, 18, 0), -- Future and not accepted
 (7, '2023-07-01', '2023-07-05', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 2, 'Mrs. Johnson', 1, 1, 3, 19, 1), -- Past and accepted
 (7, '2024-07-10', '2024-07-15', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 2, 'Mrs. Johnson', 1, 1, 3, 20, 1), -- Future and accepted
-(7, '2024-08-01', '2024-08-05', 5, 'Due to an unknown situation, I will be absent from class on these dates. Unforeseen circumstances prevent my attendance. I apologize for any inconvenience.', 2, 'Mrs. Johnson', 1, 1, 3, 21, 0); -- Future and not accepted
+(7, '2024-08-01', '2024-08-05', 5, 'Due to an unknown situation, I will be absent from class on these dates. Unforeseen circumstances prevent my attendance. I apologize for any inconvenience.', 2, 'Mrs. Johnson', 1, 1, 3, 21, 0), -- Future and not accepted
 (8, '2023-08-01', '2023-08-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 3, 'Mr. Davis', 1, 1, 1, 22, 1), -- Past and accepted
 (8, '2024-08-10', '2024-08-15', 1, 'Medical reasons prevent me from attending class on these dates. Health issues need my immediate attention. Thank you for your understanding.', 3, 'Mr. Davis', 1, 1, 1, 23, 1), -- Future and accepted
-(8, '2024-09-01', '2024-09-05', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 3, 'Mr. Davis', 1, 1, 1, 24, 0); -- Future and not accepted
+(8, '2024-09-01', '2024-09-05', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 3, 'Mr. Davis', 1, 1, 1, 24, 0), -- Future and not accepted
 (9, '2023-09-01', '2023-09-05', 4, 'I have an unusual circumstance preventing me from attending class on these dates. An unexpected situation has arisen. I appreciate your understanding during this time.', 4, 'Ms. Williams', 1, 1, 1, 25, 1), -- Past and accepted
 (9, '2024-09-10', '2024-09-15', 2, 'I will be out of town for a family funeral during this period. Need time off for a family event. Your understanding is much appreciated.', 4, 'Ms. Williams', 1, 1, 1, 26, 1), -- Future and accepted
-(9, '2024-10-01', '2024-10-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 4, 'Ms. Williams', 1, 1, 1, 27, 0); -- Future and not accepted
+(9, '2024-10-01', '2024-10-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 4, 'Ms. Williams', 1, 1, 1, 27, 0), -- Future and not accepted
 (10, '2023-10-01', '2023-10-05', 1, 'Medical reasons require me to take a day off from class. Health issues need my immediate attention. I will keep you updated on my progress.', 5, 'Mr. Brown', 1, 1, 4, 28, 1), -- Past and accepted
 (10, '2024-10-10', '2024-10-15', 4, 'Unforeseen circumstances prevent me from attending class on these dates. An unexpected situation has arisen. I apologize for any inconvenience.', 5, 'Mr. Brown', 1, 1, 4, 29, 1), -- Future and accepted
 (10, '2024-11-01', '2024-11-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 5, 'Mr. Brown', 1, 1, 4, 30, 0); -- Future and not accepted
+
