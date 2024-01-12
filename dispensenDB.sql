@@ -208,3 +208,4 @@ VALUES
 (10, '2024-10-10', '2024-10-15', 4, 'Unforeseen circumstances prevent me from attending class on these dates. An unexpected situation has arisen. I apologize for any inconvenience.', 5, 'Mr. Brown', 1, 1, 4, 29, 1), -- Future and accepted
 (10, '2024-11-01', '2024-11-05', 3, 'I will be taking a personal day to handle private matters. Urgent personal business to attend to. I appreciate your support during this time.', 5, 'Mr. Brown', 1, 1, 4, 30, 0); -- Future and not accepted
 
+select* from lessions;
