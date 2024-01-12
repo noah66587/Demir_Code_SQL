@@ -129,16 +129,34 @@
                         const dispensionContainer = document.createElement('div');
                         dispensionContainer.classList.add('dispension');
 
-                        // Create separate spans for each type of information
                         const dispensionId = createSpan('Dispension ID', dispension.dispensionID);
                         dispensionContainer.appendChild(dispensionId);
 
-                        const userId = createSpan('User ID', dispension.user_id);
-                        dispensionContainer.appendChild(userId);
+                        const dispensionName = createSpan('Name', dispension.name);
+                        dispensionContainer.appendChild(dispensionName);
 
-                        const name = createSpan('Name', dispension.name);
-                        dispensionContainer.appendChild(name);
-                        // Add other dispension details similarly
+                        const dispensionSurname = createSpan('Surname', dispension.surname);
+                        dispensionContainer.appendChild(dispensionSurname);
+
+                        dispension.start_date = new Date(dispension.start_date);
+                        dispension.end_date = new Date(dispension.end_date);
+                        const startDate = createSpan('Start Date', dispension.start_date.toLocaleDateString('en-GB'));
+                        dispensionContainer.appendChild(startDate);
+
+                        const endDate = createSpan('End Date', dispension.end_date.toLocaleDateString('en-GB'));
+                        dispensionContainer.appendChild(endDate);
+
+                        const reason = createSpan('Reason', dispension.reason);
+                        dispensionContainer.appendChild(reason);
+
+                        const dispensionClass = createSpan('Class', dispension.class);
+                        dispensionContainer.appendChild(dispensionClass);
+
+                        const dispensionLession = createSpan('Lesson', dispension.lession);
+                        dispensionContainer.appendChild(dispensionLession);
+
+                        const dispensionJob = createSpan('Job', dispension.job);
+                        dispensionContainer.appendChild(dispensionJob);
 
                         // Add event listener for dispension details
                         dispensionContainer.addEventListener('click', () => {
@@ -209,14 +227,34 @@
                 const dispensionContainer = document.createElement('div');
                 dispensionContainer.classList.add('dispension');
 
-                // Create separate spans for each type of information
                 const dispensionId = createSpan('Dispension ID', dispension.dispensionID);
                 dispensionContainer.appendChild(dispensionId);
 
-                const userId = createSpan('User ID', dispension.user_id);
-                dispensionContainer.appendChild(userId);
+                const dispensionName = createSpan('Name', dispension.name);
+                dispensionContainer.appendChild(dispensionName);
 
-                // Add other dispension details similarly
+                const dispensionSurname = createSpan('Surname', dispension.surname);
+                dispensionContainer.appendChild(dispensionSurname);
+
+                dispension.start_date = new Date(dispension.start_date);
+                dispension.end_date = new Date(dispension.end_date);
+                const startDate = createSpan('Start Date', dispension.start_date.toLocaleDateString('en-GB'));
+                dispensionContainer.appendChild(startDate);
+
+                const endDate = createSpan('End Date', dispension.end_date.toLocaleDateString('en-GB'));
+                dispensionContainer.appendChild(endDate);
+
+                const reason = createSpan('Reason', dispension.reason);
+                dispensionContainer.appendChild(reason);
+
+                const dispensionClass = createSpan('Class', dispension.class);
+                dispensionContainer.appendChild(dispensionClass);
+
+                const dispensionLession = createSpan('Lesson', dispension.lession);
+                dispensionContainer.appendChild(dispensionLession);
+
+                const dispensionJob = createSpan('Job', dispension.job);
+                dispensionContainer.appendChild(dispensionJob);
 
                 // Add event listener for dispension details
                 dispensionContainer.addEventListener('click', () => {
