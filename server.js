@@ -1,37 +1,37 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql2');
+const express = require('express'); // Use express for setting up the server
+const bodyParser = require('body-parser'); // Use Body Parser to send the data more effectively
+const mysql = require('mysql2'); // Add Mysql2 for the connection with the database
 const path = require('path');
-const session = require('express-session');
+const session = require('express-session'); // Add Express-session to remember the loginID
 const multer = require('multer'); // Add multer for file uploads
 const fs = require('fs');
 
-const app = express();
+const app = express(); // Determined Port on which the Website will run
 const port = 3000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(session({ // Details for the Session
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true
 }));
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }); // Setup to use Multer, which isnt really implememnted into the code but still helps with getting data from the file upload
 
-const connection = mysql.createConnection({
+const connection = mysql.createConnection({ // Mysql2 connection to the server
     host: 'localhost',
     user: 'root',
-    password: 'eL2R69fz_g!oE6-2yd7Q-KmX',
+    password: 'Root_Password',
     database: 'DispensenDB',
 });
 
 app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/login.html');
+    res.sendFile(__dirname + '/login.html'); //Route for the login page
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', (req, res) => { //Route to push the login page details to log in.
     const { username, password, admin } = req.body;
 
     const sql = 'SELECT * FROM login WHERE username = ? AND password = ? AND admin < 3';
@@ -42,7 +42,7 @@ app.post('/login', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error', message: error.message });
         } else {
             if (results.length > 0) {
-                const loginID = results[0].loginID;
+                const loginID = results[0].loginID;         // Input the results into the session
                 const isAdmin = results[0].admin === 1;
 
                 getUserIdFromLoginID(loginID, (err, userID) => {
@@ -141,7 +141,8 @@ app.get('/dispension/:dispensionID', (req, res) => {
             d.work_check,
             d.parent_check,
             f.file_name,  
-            d.accepted
+            d.accepted,
+            le.lession
         FROM
             dispensions d
         JOIN
@@ -154,6 +155,7 @@ app.get('/dispension/:dispensionID', (req, res) => {
             jobs j ON j.jobID = d.jobID
         JOIN
             files f ON f.fileID = d.fileID
+        JOIN lessions le on d.lessionID = le.lessionID
         WHERE
             d.dispensionID = ?;
     `;
@@ -461,8 +463,9 @@ app.get('/admin/dispension/:dispensionID', (req, res) => {
                 j.job,
                 d.work_check,
                 d.parent_check,
-                f.file_name,  -- Include the file_name column
-                d.accepted
+                f.file_name, 
+                d.accepted,
+                le.lession
             FROM
                 dispensions d
             JOIN
@@ -475,6 +478,7 @@ app.get('/admin/dispension/:dispensionID', (req, res) => {
                 jobs j ON j.jobID = d.jobID
             JOIN
                 files f ON f.fileID = d.fileID
+            JOIN lessions le on d.lessionID = le.lessionID
             WHERE
                 d.dispensionID = ?;
         `;
